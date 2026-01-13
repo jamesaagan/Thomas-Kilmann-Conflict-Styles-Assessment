@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conflict Styles Assessment</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Smooth transition for button states */
+        .option-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Main Container -->
+    <div id="app-container" class="bg-white rounded-xl shadow-xl w-full max-w-3xl overflow-hidden fade-in">
+        
+        <!-- HEADER -->
+        <div id="main-header" class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white transition-all duration-300">
+            <div class="flex justify-between items-center mb-2">
+                <h1 class="text-2xl font-bold">Conflict Styles Assessment</h1>
+                <span id="progress-text" class="hidden text-sm bg-white/20 px-3 py-1 rounded-full">1 / 30</span>
+            </div>
+            <div id="progress-container" class="hidden w-full bg-white/30 rounded-full h-2">
+                <div id="progress-bar" class="bg-white h-2 rounded-full transition-all duration-300" style="width: 3%"></div>
+            </div>
+        </div>
+
+        <!-- CONTENT AREA -->
+        <div id="content-area" class="p-8">
+            
+            <!-- VIEW 1: START SCREEN -->
+            <div id="start-view" class="fade-in">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Interpreting Your Scores</h2>
+                <div class="prose text-gray-600 mb-8">
+                    <p class="mb-4">
+                        You may look at your scores and wonder how “right” they are. There are no right and wrong answers in this assessment, as it examines how you handle conflict situations which can vary greatly.
+                    </p>
+                    <p class="mb-4">
+                        Different contexts call for different approaches, and there is a time and a place to use each of the conflict styles.
+                    </p>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-sm">
+                        <p class="font-semibold text-blue-800 mb-2">Note:</p>
+                        <p>This quiz is based on the TKI instrument, published by CPP, Inc.—further information and TKI materials can be found on www.cpp.com.</p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button onclick="startQuiz()" class="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300 shadow-md">
+                        Start Assessment
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIEW 2: QUIZ QUESTIONS -->
+            <div id="quiz-view" class="hidden">
+                <h2 class="text-lg text-gray-600 font-medium mb-6 text-center">
+                    Choose the statement that best describes you in a conflict situation:
+                </h2>
+                
+                <!-- Options -->
+                <div id="options-container" class="space-y-4 mb-8">
+                    <!-- Buttons will be injected here by JS -->
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-between items-center border-t pt-6 mt-6">
+                    <button id="prev-btn" onclick="prevQuestion()" class="flex items-center px-4 py-2 text-gray-600 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors font-medium">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Back
+                    </button>
+                    
+                    <button id="next-btn" onclick="nextQuestion()" class="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium shadow-md">
+                        Next
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIEW 3: RESULTS -->
+            <div id="results-view" class="hidden">
+                
+                <!-- Interpretation Key -->
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-8">
+                    <h3 class="font-bold text-gray-800 mb-3 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        How to read your scores (Range 0-12)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="flex items-center p-2 bg-white rounded shadow-sm border-l-4 border-green-500">
+                            <span class="font-bold mr-2 text-lg text-gray-700">9 - 12</span>
+                            <span class="text-gray-600">You tend to use this style <span class="font-semibold">frequently</span>.</span>
+                        </div>
+                        <div class="flex items-center p-2 bg-white rounded shadow-sm border-l-4 border-yellow-500">
+                            <span class="font-bold mr-2 text-lg text-gray-700">5 - 8</span>
+                            <span class="text-gray-600">You use this style <span class="font-semibold">sometimes</span>.</span>
+                        </div>
+                        <div class="flex items-center p-2 bg-white rounded shadow-sm border-l-4 border-gray-400">
+                            <span class="font-bold mr-2 text-lg text-gray-700">0 - 4</span>
+                            <span class="text-gray-600">You don't use this style <span class="font-semibold">very often</span>.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top 2 Section -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Your Dominant Styles
+                    </h2>
+                    <div id="top-results-container" class="grid md:grid-cols-2 gap-6">
+                        <!-- Top results injected here -->
+                    </div>
+                </div>
+
+                <!-- Full Breakdown Section -->
+                <div class="mb-8 border-t pt-8">
+                    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        Detailed Breakdown (All Styles)
+                    </h2>
+                    <div id="breakdown-container" class="space-y-6">
+                        <!-- Full details injected here -->
+                    </div>
+                </div>
+
+                <!-- Restart Button -->
+                <div class="text-center pt-6 border-t">
+                    <button onclick="resetQuiz()" class="inline-flex items-center px-6 py-3 bg-gray-800 text-white font-semibold rounded-lg hover:bg-gray-700 transition duration-300">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.051M20.418 9c-.775-4.233-4.49-7.525-8.918-7.525C6.669 1.475 2.589 5.097 1.56 9.855M19.58 14.145c-.247 4.758-4.327 8.38-9.08 8.38-4.427 0-8.143-3.292-8.918-7.525m.5 8v-5h-.051"></path></svg>
+                        Retake Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 px-8 py-4 border-t flex justify-between items-center text-sm text-gray-500">
+            <span>Student Assessment</span>
+            <span>Based on TKI Instrument</span>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DATA ---
+        const questions = [
+            { id: 1, options: [{ text: "Occasionally I hold back and let others figure out how to resolve the conflict.", style: "Avoider" }, { text: "I aim to focus on similarities rather than differences in views.", style: "Accommodator" }] },
+            { id: 2, options: [{ text: "I like to resolve problems through negotiating.", style: "Compromiser" }, { text: "I try to make sure everyone's concerns are addressed.", style: "Problem Solver" }] },
+            { id: 3, options: [{ text: "I know what I want and I go for it.", style: "Competer" }, { text: "I sometimes aim to make the other person feel better in order to end a conflict.", style: "Accommodator" }] },
+            { id: 4, options: [{ text: "I like to resolve problems through negotiating.", style: "Compromiser" }, { text: "I'm willing to give up my own views if it will help the other person feel better.", style: "Accommodator" }] },
+            { id: 5, options: [{ text: "I always try to work together to solve problems.", style: "Problem Solver" }, { text: "I aim to avert uncomfortable situations when possible.", style: "Avoider" }] },
+            { id: 6, options: [{ text: "I do what I can to avoid tension.", style: "Avoider" }, { text: "I aim to convince others that I am right.", style: "Competer" }] },
+            { id: 7, options: [{ text: "I stall in order to take some time to think about problems before approaching them.", style: "Avoider" }, { text: "I am willing to compromise when others do.", style: "Compromiser" }] },
+            { id: 8, options: [{ text: "I know what I want and I go for it.", style: "Competer" }, { text: "I aim to discuss problems openly so that they can be worked out right away.", style: "Problem Solver" }] },
+            { id: 9, options: [{ text: "Sometimes conflicts are better left not discussed.", style: "Avoider" }, { text: "I try to get what I want.", style: "Competer" }] },
+            { id: 10, options: [{ text: "I know what I want and I go for it.", style: "Competer" }, { text: "I like to resolve problems through negotiating.", style: "Compromiser" }] },
+            { id: 11, options: [{ text: "I aim to discuss problems openly so that they can be worked out right away.", style: "Problem Solver" }, { text: "I sometimes aim to make the other person feel better in order to end a conflict.", style: "Accommodator" }] },
+            { id: 12, options: [{ text: "At times I keep my views to myself in order to avoid conflict.", style: "Avoider" }, { text: "I prefer a \"give and take\" solution to problems where both sides make adjustments.", style: "Compromiser" }] },
+            { id: 13, options: [{ text: "If the other person can agree to disagree, I can do the same.", style: "Compromiser" }, { text: "I make sure others know my views.", style: "Competer" }] },
+            { id: 14, options: [{ text: "I share my thoughts and ask others to share theirs.", style: "Problem Solver" }, { text: "I aim to convince others that I am right.", style: "Competer" }] },
+            { id: 15, options: [{ text: "I sometimes aim to make the other person feel better in order to end a conflict.", style: "Accommodator" }, { text: "I aim to avert uncomfortable situations when possible.", style: "Avoider" }] },
+            { id: 16, options: [{ text: "I try make sure the other person does not get upset.", style: "Accommodator" }, { text: "I try to make sure others understand my reasoning and why I am right.", style: "Competer" }] },
+            { id: 17, options: [{ text: "I know what I want and I go for it.", style: "Competer" }, { text: "I aim to avert uncomfortable situations when possible.", style: "Avoider" }] },
+            { id: 18, options: [{ text: "I allow others to voice their opinions without objecting if it makes them feel better.", style: "Accommodator" }, { text: "I prefer a \"give and take\" solution to problems where both sides make adjustments.", style: "Compromiser" }] },
+            { id: 19, options: [{ text: "I try to work out problems with others right away.", style: "Problem Solver" }, { text: "I sometimes stall in order to take some time to think about problems before approaching them.", style: "Avoider" }] },
+            { id: 20, options: [{ text: "I try to work out problems with others right away.", style: "Problem Solver" }, { text: "I prefer to figure out what the fairest outcome would be from everyone's perspective.", style: "Compromiser" }] },
+            { id: 21, options: [{ text: "I try to pay attention to the other person's opinions when we are working out problems.", style: "Accommodator" }, { text: "I prefer to talk about problems directly.", style: "Problem Solver" }] },
+            { id: 22, options: [{ text: "I take a problem-solving approach where all sides figure out what we can agree on and what we are willing to give up.", style: "Problem Solver" }, { text: "I tell others what I want.", style: "Competer" }] },
+            { id: 23, options: [{ text: "I tend to worry about making everyone happy.", style: "Accommodator" }, { text: "Occasionally I hold back and let others figure out how to resolve the conflict.", style: "Avoider" }] },
+            { id: 24, options: [{ text: "I try to please others if it seems important to them.", style: "Accommodator" }, { text: "I aim to work together to settle our differences through a bargaining approach.", style: "Compromiser" }] },
+            { id: 25, options: [{ text: "I try to convince people to agree with me.", style: "Competer" }, { text: "I try to pay attention to the other person's opinions when we are working out problems.", style: "Accommodator" }] },
+            { id: 26, options: [{ text: "I try to find a way for different sides to meet half way in a conflict.", style: "Compromiser" }, { text: "I tend to worry about making everyone happy.", style: "Accommodator" }] },
+            { id: 27, options: [{ text: "At times I keep my views to myself in order to avoid conflict.", style: "Avoider" }, { text: "I allow others to voice their opinions without objecting if it makes them feel better.", style: "Accommodator" }] },
+            { id: 28, options: [{ text: "I know what I want and I go for it.", style: "Competer" }, { text: "I always try to work together to solve problems.", style: "Problem Solver" }] },
+            { id: 29, options: [{ text: "I try to find a way for different sides to meet half way in a conflict.", style: "Compromiser" }, { text: "Sometimes conflicts are better left not discussed.", style: "Avoider" }] },
+            { id: 30, options: [{ text: "I try make sure the other person does not get upset.", style: "Accommodator" }, { text: "I tell others when something is wrong so that we can work together to make it right.", style: "Problem Solver" }] }
+        ];
+
+        const styleDescriptions = {
+            'Competer': {
+                summary: "Competers are known for being persuasive and direct. They know the result they want in a conflict situation, and they go for it.",
+                strengths: "Their strengths are that they are often passionate about their views and dedicated to pursuing their convictions. Competers are good at making quick decisions, and tend not to waste time, which is especially helpful in the time of crisis.",
+                weaknesses: "Sometimes Competers wind up with unequal relationships with others, and feelings of others can be hurt or overlooked with their decision-making style."
+            },
+            'Problem Solver': {
+                summary: "Problem Solvers tend to want to discuss all the details of a problem and work through it together so that everyone gets what he or she wants and is happy in the end.",
+                strengths: "Their strengths are that they tend to welcome differences, build high-levels of trust and mutual understanding in relationships. There is also the potential to learn from creative problem solving.",
+                weaknesses: "When time is a factor, it is difficult to spend the energy and time needed to process the way Problem Solvers tend do. There is also the potential for burnout from over-processing."
+            },
+            'Compromiser': {
+                summary: "Compromisers approach conflict with the goal of compromise. They tend to think about what they are willing to give up and what they are willing to hold on to, and try to gear communication to focus on this give and take for all parties.",
+                strengths: "It is a good way to promote cooperation. It can be done fairly quickly when both parties are engaged.",
+                weaknesses: "Sometimes neither party really winds up with what he/she wants. It can also be viewed as a Band-Aid approach that doesn't really get to the root of a conflict."
+            },
+            'Avoider': {
+                summary: "Avoiders tend to step away from conflict. They often keep their opinions to themselves in conflict situations so as not to continue or escalate the conflict.",
+                strengths: "They are often admired for having a calming, quiet presence in the face of crisis.",
+                weaknesses: "Avoiders sometimes keep their feelings bottled up and then aren't able to meet their own needs. This can result in a frustrating buildup of emotions."
+            },
+            'Accommodator': {
+                summary: "Accommodators have a harmonizing approach to conflict. They often focus on supporting others in a conflict situation and are adept at placating people in uncomfortable situations.",
+                strengths: "Accommodators often gain strong appreciation from others involved in a conflict.",
+                weaknesses: "Accommodators may build up resentment from denying their own needs. It also may be difficult for those who want to get to the root of the problem to work with Accommodators who tend to focus on making others happy."
+            }
+        };
+
+        // --- STATE ---
+        let currentQuestion = 0;
+        let userAnswers = new Array(questions.length).fill(null); 
+
+        // --- DOM ELEMENTS ---
+        const startView = document.getElementById('start-view');
+        const quizView = document.getElementById('quiz-view');
+        const resultsView = document.getElementById('results-view');
+        const progressText = document.getElementById('progress-text');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const optionsContainer = document.getElementById('options-container');
+        const topResultsContainer = document.getElementById('top-results-container');
+        const breakdownContainer = document.getElementById('breakdown-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        // --- FUNCTIONS ---
+
+        function startQuiz() {
+            startView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            progressText.classList.remove('hidden');
+            progressContainer.classList.remove('hidden');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const question = questions[currentQuestion];
+            const currentAnswer = userAnswers[currentQuestion];
+            
+            // Update Progress
+            progressText.textContent = `${currentQuestion + 1} / ${questions.length}`;
+            progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+            // Clear old options
+            optionsContainer.innerHTML = '';
+
+            // Create buttons
+            question.options.forEach(option => {
+                const btn = document.createElement('button');
+                
+                // Base styles
+                let classes = "option-btn w-full text-left p-6 rounded-xl border-2 transition-all duration-200 group relative mb-2 ";
+                
+                // Conditional styling based on selection
+                if (currentAnswer === option.style) {
+                    classes += "border-blue-500 bg-blue-50 ring-2 ring-blue-200";
+                } else {
+                    classes += "border-gray-200 hover:border-blue-300 hover:bg-gray-50";
+                }
+
+                btn.className = classes;
+                btn.onclick = () => handleOptionSelect(option.style);
+                
+                // Checkmark logic
+                const circleClasses = currentAnswer === option.style 
+                    ? "bg-blue-500 border-blue-500 text-white" 
+                    : "border-gray-300 group-hover:border-blue-400";
+
+                const checkmark = currentAnswer === option.style 
+                    ? `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>`
+                    : "";
+
+                btn.innerHTML = `
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1 mr-4 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${circleClasses}">
+                            ${checkmark}
+                        </div>
+                        <span class="text-lg ${currentAnswer === option.style ? 'text-blue-900 font-semibold' : 'text-gray-800 font-medium'} leading-relaxed">${option.text}</span>
+                    </div>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            // Update Nav Buttons
+            prevBtn.disabled = currentQuestion === 0;
+            
+            // Next Button Logic
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.innerHTML = `Submit Assessment <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+            } else {
+                nextBtn.innerHTML = `Next <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            }
+
+            // Disable Next/Submit if no answer selected
+            if (currentAnswer === null) {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function handleOptionSelect(style) {
+            userAnswers[currentQuestion] = style;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            if (!userAnswers[currentQuestion]) return;
+
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+                document.getElementById('app-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                calculateAndShowResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function calculateAndShowResults() {
+            let scores = { 'Competer': 0, 'Problem Solver': 0, 'Compromiser': 0, 'Avoider': 0, 'Accommodator': 0 };
+            
+            userAnswers.forEach(answer => {
+                if(answer && scores.hasOwnProperty(answer)) {
+                    scores[answer]++;
+                }
+            });
+
+            // Hide Quiz, Show Results
+            quizView.classList.add('hidden');
+            progressContainer.classList.add('hidden');
+            progressText.classList.add('hidden');
+            resultsView.classList.remove('hidden');
+            document.getElementById('app-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Process Scores
+            const sortedStyles = Object.entries(scores).sort(([, a], [, b]) => b - a);
+            const topTwo = sortedStyles.slice(0, 2);
+
+            // Render Top 2
+            topResultsContainer.innerHTML = topTwo.map(([style, score], index) => `
+                <div class="border-2 rounded-xl p-6 ${index === 0 ? 'border-blue-500 bg-blue-50' : 'border-indigo-400 bg-indigo-50'}">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">${style}</h3>
+                        <span class="bg-white px-3 py-1 rounded-full text-sm font-semibold shadow-sm text-gray-600">Score: ${score}</span>
+                    </div>
+                    <p class="text-gray-700 mb-4">${styleDescriptions[style].summary}</p>
+                </div>
+            `).join('');
+
+            // Render Full Breakdown (All 5 Styles with full text)
+            breakdownContainer.innerHTML = sortedStyles.map(([style, score]) => `
+                <div class="bg-white border rounded-lg p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-lg text-gray-800">${style}</h3>
+                        <div class="flex items-center">
+                             <div class="mr-4 w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-600" style="width: ${(score / 12) * 100}%"></div>
+                             </div>
+                             <span class="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">${score} / 12</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">${styleDescriptions[style].summary}</p>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-green-50 p-3 rounded">
+                            <span class="font-bold text-green-800 block mb-1">Strengths</span>
+                            <p class="text-gray-700">${styleDescriptions[style].strengths}</p>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded">
+                            <span class="font-bold text-red-800 block mb-1">Weaknesses</span>
+                            <p class="text-gray-700">${styleDescriptions[style].weaknesses}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            
+            resultsView.classList.add('hidden');
+            startView.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
